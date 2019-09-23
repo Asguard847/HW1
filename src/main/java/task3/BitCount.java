@@ -1,29 +1,34 @@
 package task3;
 
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import task3.service.BitCountService;
+import task3.service.InputService;
 
 public class BitCount {
 
-    public static void main(String[] args) {
+    private InputService inputService;
+    private BitCountService bitCountService;
+
+    public int run() {
+
         System.out.println("Enter your number");
+        String inputString = inputService.getInput();
+        int numberOfBits = 0;
+        try {
+            long input = Long.parseLong(inputString);
+            numberOfBits = bitCountService.countBits(input);
+            System.out.println("Number of bits: " + numberOfBits);
 
-        try (Scanner sc = new Scanner(System.in)) {
-            long input = sc.nextLong();
-            System.out.println("Number of bits: " + byteCount(input));
-        } catch (InputMismatchException e) {
-            System.out.println("Wrong input");
+        } catch (NumberFormatException e) {
+            throw new RuntimeException("Wrong input");
         }
+        return numberOfBits;
     }
 
-    public static int byteCount(long value) {
-
-        int count = 0;
-        while (value > 0) {
-            value = value >> 1;
-            count++;
-        }
-        return count;
+    public void setInputService(InputService inputService) {
+        this.inputService = inputService;
     }
 
+    public void setBitCountService(BitCountService bitCountService) {
+        this.bitCountService = bitCountService;
+    }
 }
