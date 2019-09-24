@@ -1,45 +1,47 @@
 package task5;
 
 import javafx.util.Pair;
+import task5.service.CheckIfBitIsSetService;
 import task5.service.InputService;
-
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import task5.service.SwitchBitService;
 
 public class ChangeBit {
 
     private InputService inputService;
+    private CheckIfBitIsSetService checkIfBitIsSetService;
+    private SwitchBitService switchBitService;
 
-    public static void main(String[] args) {
-
-            boolean byteIsSet = checkIfByteIsSet(number, pos);
-
-            int result;
-            if (byteIsSet) {
-                result = number & ~(1 << pos);
-            } else {
-                result = number | (1 << pos);
-            }
-            System.out.println("Resulting value is: " + result);
-
-
+    public ChangeBit(InputService inputService,
+                     CheckIfBitIsSetService checkIfBitIsSetService,
+                     SwitchBitService switchBitService) {
+        this.inputService = inputService;
+        this.checkIfBitIsSetService = checkIfBitIsSetService;
+        this.switchBitService = switchBitService;
     }
 
-    public int run(){
+    public int runWithBitDefined() {
 
         Pair<Integer, Integer> userInput = inputService.getInput();
         int number = userInput.getKey();
         int pos = userInput.getValue();
+
+        boolean byteIsSet = checkIfBitIsSetService.checkIfBitIsSet(number, pos);
+
+        int resultingInt = switchBitService.switchByteDefined(number, pos, byteIsSet);
+
+        return resultingInt;
     }
 
-    public boolean checkIfByteIsSet(int number, int pos) {
-        int requiredByte = number >> pos & 1;
-        return requiredByte == 1 ? true : false;
-    }
+    public int runWithBitUndefined() {
 
-    //Another convenient method if we just need to switch a bit
-    public static int changeBit(int number, int pos) {
-        return number ^ (1 << pos);
+        Pair<Integer, Integer> userInput = inputService.getInput();
+        int number = userInput.getKey();
+        int pos = userInput.getValue();
+
+        int resultingInt = switchBitService.switchByte(number, pos);
+
+        return resultingInt;
+
     }
 
 }
